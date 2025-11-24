@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.EditorTools;
 using UnityEngine;
 
 public class AsteroidManager : MonoBehaviour
@@ -25,6 +26,11 @@ public class AsteroidManager : MonoBehaviour
 
     [SerializeField]
     public float maxForceMagnitudeTowardsCenter = 1f;
+
+    public List<Transform> segments = new List<Transform>();
+
+    public Transform segmentPrefab;
+    private GameObject asteroid;
 
     private void Awake()
     {
@@ -57,6 +63,9 @@ public class AsteroidManager : MonoBehaviour
         ApplyRandomForceTowardsCenter(asteroid);
 
         asteroids.Add(asteroid);
+        segments.Add(asteroid.transform);
+
+        Grow();
     }
 
     private void ApplyRandomForceTowardsCenter(GameObject asteroid)
@@ -126,5 +135,14 @@ private void ResetTimer()
     public void NotifyAsteroidDestroyed(GameObject asteroid)
     {
         asteroids.Remove(asteroid);
+        segments.Remove(asteroid.transform);
     }
+
+    private void Grow()
+    {
+        Transform segment = Instantiate(segmentPrefab);
+        segment.position = segments[segments.Count - 1].position;
+        segments.Add(segment);
+    }
+
 }
