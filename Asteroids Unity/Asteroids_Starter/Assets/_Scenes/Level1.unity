@@ -726,12 +726,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5512821914632056580, guid: 6b2f4193f2b434b4eaa0e6e371f23ff1, type: 3}
+      propertyPath: timerMax
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5512821914632056580, guid: 6b2f4193f2b434b4eaa0e6e371f23ff1, type: 3}
       propertyPath: bulletSpeed
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5864120440882639698, guid: 6b2f4193f2b434b4eaa0e6e371f23ff1, type: 3}
       propertyPath: m_IsKinematic
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -907,7 +911,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SnakeMovement
   movementSpeed: 1
-  timerMax: 1
+  timerMax: 0.4
 --- !u!1001 &1624146940
 PrefabInstance:
   m_ObjectHideFlags: 0
