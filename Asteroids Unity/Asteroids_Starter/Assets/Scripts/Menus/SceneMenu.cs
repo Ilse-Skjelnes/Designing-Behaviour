@@ -22,8 +22,13 @@ public class SceneMenu : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.LoadScene(0);
+            ReturnStartMenut();
         }
+    }
+
+    public void ReturnStartMenut()
+    {
+        SceneManager.LoadScene(0);
     }
 }
     
