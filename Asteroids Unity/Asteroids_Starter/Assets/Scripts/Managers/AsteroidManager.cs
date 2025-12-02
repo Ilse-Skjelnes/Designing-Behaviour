@@ -71,6 +71,12 @@ public class AsteroidManager : MonoBehaviour
             stringCount++;
             
         }
+
+        if (asteroidSpawnTimer <= 0)
+        {
+            RandomMovement(asteroidString[0].GetComponent<Rigidbody>());
+            ResetTimer();
+        }
     }
 
     private void SpawnAsteroidOffscreen()
@@ -181,7 +187,7 @@ private void ResetTimer()
 
         Vector3 direction = new Vector3(Random.Range(-maxRotation, maxRotation), 0, Random.Range(-maxRotation, maxRotation));
 
-        rigidbody.AddForce(direction * asteroidSpeed * Time.deltaTime, ForceMode.VelocityChange);
+        rigidbody.AddForce(direction * asteroidSpeed * Time.deltaTime, ForceMode.Impulse);
     }
 
     private void Grow(int stringCounter)
