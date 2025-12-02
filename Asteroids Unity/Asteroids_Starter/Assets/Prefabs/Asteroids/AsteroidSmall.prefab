@@ -105,6 +105,7 @@ GameObject:
   - component: {fileID: 5278278419037312925}
   - component: {fileID: 3868887782059191986}
   - component: {fileID: 8508229549537775736}
+  - component: {fileID: -6987411092504172879}
   m_Layer: 7
   m_Name: AsteroidSmall
   m_TagString: Untagged
@@ -238,7 +239,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointsScored: 10
+  data: {fileID: -6987411092504172879}
   asteroidToSpawn: {fileID: 0}
   numberOfAsteroidsToSpawn: 0
   minForceMagnitudeSpawnedAsteroid: 0.5
   maxForceMagnitudeSpawnedAsteroid: 1
+--- !u!114 &-6987411092504172879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6689194817083154363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0c11cc35497a7c4bae64f9626f8af8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AsteroidData
+  <Rigidbody>k__BackingField: {fileID: 8564019977565144592}

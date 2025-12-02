@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2460777960999797867, guid: 03f8f7590d585434891adfc851a6941e, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.25
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 2460777960999797867, guid: 03f8f7590d585434891adfc851a6941e, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.25
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 2460777960999797867, guid: 03f8f7590d585434891adfc851a6941e, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.25
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 2460777960999797867, guid: 03f8f7590d585434891adfc851a6941e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -72,6 +72,26 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -2007148528, guid: 2043e6bff03b8c747a33e72e113fa5b1, type: 3}
+    - target: {fileID: 7588921779091567152, guid: 03f8f7590d585434891adfc851a6941e, type: 3}
+      propertyPath: m_Size.x
+      value: 0.546875
+      objectReference: {fileID: 0}
+    - target: {fileID: 7588921779091567152, guid: 03f8f7590d585434891adfc851a6941e, type: 3}
+      propertyPath: m_Size.y
+      value: 0.59375
+      objectReference: {fileID: 0}
+    - target: {fileID: 7588921779091567152, guid: 03f8f7590d585434891adfc851a6941e, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2007148528, guid: 2043e6bff03b8c747a33e72e113fa5b1, type: 3}
+    - target: {fileID: 7588921779091567152, guid: 03f8f7590d585434891adfc851a6941e, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7588921779091567152, guid: 03f8f7590d585434891adfc851a6941e, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7628191476058788939, guid: 03f8f7590d585434891adfc851a6941e, type: 3}
       propertyPath: m_LocalScale.x
       value: 2
@@ -122,14 +142,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6689194817083154363, guid: 03f8f7590d585434891adfc851a6941e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7996252603926303362}
+      addedObject: {fileID: 351658168854668790}
   m_SourcePrefab: {fileID: 100100000, guid: 03f8f7590d585434891adfc851a6941e, type: 3}
 --- !u!1 &5916431973858217542 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6689194817083154363, guid: 03f8f7590d585434891adfc851a6941e, type: 3}
   m_PrefabInstance: {fileID: 1067257137726820861}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7996252603926303362
+--- !u!114 &351658168854668790
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -138,6 +158,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5916431973858217542}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb80788a060dede45bb5718a4c4686e1, type: 3}
+  m_Script: {fileID: 11500000, guid: c12580fa2d7355642b47b96a4399edd2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GrowLikeSnake
+  m_EditorClassIdentifier: Assembly-CSharp::AsteroidMovement
+  asteroidMovementTime: 1
+  usefulNumber: 50
+  leadAsteroidTransform: []

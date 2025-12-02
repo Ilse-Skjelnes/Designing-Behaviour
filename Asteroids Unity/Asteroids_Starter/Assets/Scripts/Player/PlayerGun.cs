@@ -39,53 +39,13 @@ public class PlayerGun : MonoBehaviour
         {
             Shoot();
         }
-
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            direction = Vector3.forward;
-        }
-        else if (Input.GetKeyDown(KeyCode.S))
-        {
-            direction = Vector3.back;
-        }
-        else if (Input.GetKeyDown(KeyCode.D))
-        {
-            direction = Vector3.right;
-        }
-        else if (Input.GetKeyDown(KeyCode.A))
-        {
-            direction = Vector3.left;
-        }
-
-        if (shootingCooldownTimer <= 0)
-        {
-            directionR = direction;
-        }
-
-        timer += Time.deltaTime;
-        if (timer >= timerMax)
-        {
-            for (int i = AsteroidManager.Instance.segments.Count - 1; i > 0; i--)
-            {
-                AsteroidManager.Instance.segments[i].position = AsteroidManager.Instance.segments[i - 1].position;
-            }
-            bullet.transform.position = new Vector3(
-                Mathf.Round((bullet.transform.position.x) + direction.x),
-                0.0f,
-                Mathf.Round((bullet.transform.position.z) + direction.z)
-                );
-
-            timer -= timerMax;
-        }
-
-
     }
 
     private void Shoot()
     {
         // create bullet at bullet origin's location and rotation, and launch with speed
         bullet = GameObject.Instantiate(bulletPrefab, bulletOrigin.transform.position, bulletOrigin.transform.rotation);
-        //bullet.GetComponent<Rigidbody>().AddRelativeForce(0,0,bulletSpeed);
+        bullet.GetComponent<Rigidbody>().AddRelativeForce(0,0,bulletSpeed);
 
         // reset shooting cooldown
         shootingCooldownTimer = shootingCooldown;

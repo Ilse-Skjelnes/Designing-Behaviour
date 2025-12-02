@@ -6,6 +6,9 @@ public class AsteroidDestructionHandler : MonoBehaviour
     private int pointsScored = 1;
 
     [SerializeField]
+    AsteroidData data;
+
+    [SerializeField]
     private GameObject asteroidToSpawn;
 
     [SerializeField]
@@ -17,11 +20,12 @@ public class AsteroidDestructionHandler : MonoBehaviour
     [SerializeField]
     public float maxForceMagnitudeSpawnedAsteroid = 1f;
 
+
     private void HandleDeath()
     {
         GameManager.Instance.AddScore(pointsScored);
 
-        AsteroidManager.Instance.NotifyAsteroidDestroyed(gameObject);
+        AsteroidManager.Instance.NotifyAsteroidDestroyed(data);
         
         // spawn asteroids on death
         if (asteroidToSpawn != null)
@@ -29,7 +33,7 @@ public class AsteroidDestructionHandler : MonoBehaviour
             for (int i = 0; i < numberOfAsteroidsToSpawn; i++)
             {
                 GameObject asteroid = GameObject.Instantiate<GameObject>(asteroidToSpawn, transform.position, transform.rotation);
-                AsteroidManager.Instance.NotifyAsteroidInstantiated(asteroid);   
+                AsteroidManager.Instance.NotifyAsteroidInstantiated(data);   
                 LaunchInRandomDirection(asteroid);
             }
         }

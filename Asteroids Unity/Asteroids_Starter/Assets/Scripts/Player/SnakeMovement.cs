@@ -38,10 +38,6 @@ public class SnakeMovement : MonoBehaviour
         timer += Time.deltaTime;
         if (timer >= timerMax)
         {
-            for (int i = AsteroidManager.Instance.segments.Count - 1; i > 0; i--)
-            {
-                AsteroidManager.Instance.segments[i].position = AsteroidManager.Instance.segments[i - 1].position;
-            }
             this.transform.position = new Vector3(
                 Mathf.Round((this.transform.position.x) + direction.x),
                 0.0f,
@@ -50,9 +46,7 @@ public class SnakeMovement : MonoBehaviour
 
             timer -= timerMax;
             transform.eulerAngles = new Vector3(0, GetAngleFromVector(direction), 0);
-        }
-
-        
+        } 
     }
     private float GetAngleFromVector(Vector3 dir)
     {
