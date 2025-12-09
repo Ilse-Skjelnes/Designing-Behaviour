@@ -24,7 +24,7 @@ public class AsteroidManager : MonoBehaviour
     public float maxForceMagnitudeTowardsCenter = 1f;
 
     public List<GameObject> asteroidString = new List<GameObject>();
-    private int stringCount = 2;
+    public int stringCount = 2;
 
     [SerializeField]
     private int maxRotation = 10;

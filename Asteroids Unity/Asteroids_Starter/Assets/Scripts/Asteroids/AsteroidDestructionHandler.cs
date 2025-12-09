@@ -23,7 +23,6 @@ public class AsteroidDestructionHandler : MonoBehaviour
 
     private void HandleDeath()
     {
-        GameManager.Instance.AddScore();
 
         AsteroidManager.Instance.NotifyAsteroidDestroyed(data);
         

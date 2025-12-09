@@ -1,11 +1,14 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent (typeof(TextMeshProUGUI))]
 public class PlayerHitpointsUI : MonoBehaviour
 {
     private TextMeshProUGUI textMesh;
     private HitPoints playerHitPoints;
+
+
 
     private void Start()
     {

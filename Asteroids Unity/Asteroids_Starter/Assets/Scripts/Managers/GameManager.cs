@@ -21,13 +21,15 @@ public class GameManager : MonoBehaviour
     private GameObject player = null;
     public GameObject Player { get { return player; } }
 
+    public int currentHealth = 5;
+
     private void Awake()
     {
         // setup singleton
         if (instance != null)
             Destroy(instance.gameObject);
         instance = this;
-        score = 1;
+        
     }
     public void NotifyPlayerDeath()
     {
@@ -37,11 +39,11 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("GameOver");
     }
 
-    public void AddScore()
+    private void Update()
     {
         // increase score and update UI
 
         if (scoreTextObject != null)
-            scoreTextObject.text = "Asteroids: " + AsteroidManager.Instance.asteroidCount.ToString() +  "\n Wave:" + score.ToString();
+            scoreTextObject.text = "Asteroids: " + AsteroidManager.Instance.asteroidCount.ToString() +  "\nWave:" + score.ToString();
     }
 }

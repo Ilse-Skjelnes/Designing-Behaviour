@@ -24,7 +24,7 @@ public class HitPoints : MonoBehaviour
     public UnityEvent onInvulnerabilityEnabled;
     public UnityEvent onInvulnerabilityDisabled;
 
-    private int currentHitpoints = 0;
+    public int currentHitpoints = 0;
     public int CurrentHitPoints { get { return currentHitpoints; } }
 
     private Collider objectCollider;
@@ -67,6 +67,7 @@ public class HitPoints : MonoBehaviour
             return;
 
         currentHitpoints--;
+        GameManager.Instance.currentHealth = currentHitpoints;
 
         // instantiate new object when hit (usually for VFX)
         if (objectToSpawnWhenDamaged != null)
