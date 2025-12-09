@@ -9,8 +9,6 @@ public class AsteroidManager : MonoBehaviour
     private static AsteroidManager instance;
     public static AsteroidManager Instance { get { return instance; } }
 
-    public List<AsteroidData> asteroids = new List<AsteroidData>();
-
     public GameObject asteroidPrefab;
     public float AstreroidfollowingForce;
 
@@ -18,9 +16,6 @@ public class AsteroidManager : MonoBehaviour
     public float minSpawnTime = 1;
     public float maxSpawnTime = 3;
     private float asteroidSpawnTimer;
-
-    [SerializeField]
-    private int maxAsteroids = 5;
 
     [SerializeField]
     public float minForceMagnitudeTowardsCenter = 0.5f;
@@ -36,40 +31,51 @@ public class AsteroidManager : MonoBehaviour
     [SerializeField]
     private int asteroidSpeed = 1;
 
-    private float asteroidMovementTimer;
     [SerializeField]
-    private float asteroidMovementTime = 1;
+    private int spawnOffset = 1;
+    private Vector3 addedVector;
+    [SerializeField]
+    private float smoothTime = 1.0f;
+    [SerializeField]
+    private Vector3 refVelocity = new Vector3(0, 0, 1);
 
     [SerializeField]
-    private int usefulNumber = 50;
-    [SerializeField]
-    private List<Transform> leadAsteroidTransform = new List<Transform>();
+    private float waitingTime;
+    private float waitingTimer;
 
+    static public int asteroidScore;
+    public int asteroidCount;
+    
     private void Awake()
     {
         // setup singleton
         if (instance != null)
             Destroy(instance.gameObject);
         instance = this;
+
+        addedVector = new Vector3(spawnOffset, 0, 0);
+
+        asteroidCount = 0;
     }
 
     private void Start()
     {
         ResetTimer();
         SpawnAsteroidOffscreen();
+
+        waitingTimer = waitingTime;
     }
 
     private void Update()
     {
         asteroidSpawnTimer -= Time.deltaTime;
+        asteroidCount = asteroidString.Count;
 
         if (asteroidString.Count <= 0)
         {
-            leadAsteroidTransform.Clear();
             SpawnAsteroidOffscreen();        
             Grow(stringCount);
-            stringCount++;
-            
+            stringCount++;           
         }
 
         if (asteroidSpawnTimer <= 0)
@@ -77,40 +83,20 @@ public class AsteroidManager : MonoBehaviour
             RandomMovement(asteroidString[0].GetComponent<Rigidbody>());
             ResetTimer();
         }
+
+            
     }
 
     private void SpawnAsteroidOffscreen()
     {
         // instantiate new GO from prefab on position off screen
         GameObject asteroid = Instantiate(asteroidPrefab, GetRandomPositionOffScreen(), Quaternion.identity, transform);
-        //ApplyRandomForceTowardsCenter(asteroid);
-        AsteroidData data = asteroid.GetComponent<AsteroidData>();
-        if(asteroids.Count >= 1)
-        {
-            data.SetFollowingTarget(asteroidString[asteroidString.Count - 1].transform);
-        }
-        asteroids.Add(data);
         asteroidString.Add(asteroid);
-        ApplyRandomForceTowardsCenter(data.Rigidbody);
+
+        GameManager.Instance.score ++;
     }
 
-    private void ApplyRandomForceTowardsCenter(Rigidbody rb)
-    {
-        Rigidbody rigidbody = rb.GetComponent<Rigidbody>();
-
-        if (rigidbody == null) 
-            return;
-
-        // determine direction vector towards center
-        Vector3 direction = -rb.transform.position.normalized;
-
-        // pick random magnitude
-        float forceMagnitude = Random.Range(minForceMagnitudeTowardsCenter, maxForceMagnitudeTowardsCenter);
-
-        // apply force in given direction with given magnitude 
-        rigidbody.AddForce(direction * forceMagnitude, ForceMode.VelocityChange);
-    }
-
+  
 private void ResetTimer()
     {
         asteroidSpawnTimer = Random.Range(minSpawnTime, maxSpawnTime);
@@ -153,14 +139,8 @@ private void ResetTimer()
         return spawnPosition;
     }
 
-    public void NotifyAsteroidInstantiated(AsteroidData asteroid)
-    {
-        asteroids.Add(asteroid);
-    }
-
     public void NotifyAsteroidDestroyed(AsteroidData asteroid)
     {
-        asteroids.Remove(asteroid);
         asteroidString.Remove(asteroid.gameObject);
     }
 
@@ -169,12 +149,6 @@ private void ResetTimer()
         // instantiate new GO from prefab on position off screen
         GameObject asteroid = Instantiate(asteroidPrefab, firstAsteroidTransform, Quaternion.identity, transform);
 
-        AsteroidData data = asteroid.GetComponent<AsteroidData>();
-        if (asteroids.Count >= 1)
-        {
-            data.SetFollowingTarget(asteroids[asteroids.Count - 1].transform);
-        } 
-        asteroids.Add(data);
         asteroidString.Add(asteroid);
     }
 
@@ -190,16 +164,40 @@ private void ResetTimer()
         rigidbody.AddForce(direction * asteroidSpeed * Time.deltaTime, ForceMode.Impulse);
     }
 
-    private void Grow(int stringCounter)
+    private void Grow(int asteroidAmount)
     {
-        for (int i = 0; i < stringCounter; i++)
+        for (int i = 0; i < asteroidAmount; i++)
         {
             if (i == 0)
                 continue;
-            float x = asteroidString[i-1].transform.position.x;
-            float z = asteroidString[i-1].transform.position.z;
-            Vector3 pos = new Vector3(x, 0, z);
+
+            Vector3 spawnPosition = asteroidString[i - 1].transform.position;
+            
+            Vector3 addVector = Vector3.RotateTowards(addedVector, spawnPosition, 2 * Mathf.PI, 0.0f);
+            
+            Vector3 pos = spawnPosition + addVector;
             SpawnAtFirstAsteroid(pos);
+        }
+    }
+
+    public void MakeAsteroidsMove(GameObject asteroid)
+    {
+        int listPlace = asteroidString.IndexOf(asteroid);
+
+        if (listPlace > 0)
+        {
+            Vector3 currentPosition = asteroidString[listPlace].transform.position;
+            Vector3 targetPosition = asteroidString[listPlace - 1].transform.position;
+            Debug.Log(listPlace + "is following: " + (listPlace - 1));
+            
+            waitingTimer -= Time.deltaTime;
+            if (waitingTimer <= 0)
+            {
+                asteroid.transform.position = Vector3.SmoothDamp(currentPosition, targetPosition, ref refVelocity, smoothTime);
+                waitingTimer = waitingTime * listPlace;
+                Debug.Log("WaitingTime is: " + waitingTimer);
+            }
+
         }
     }
 }

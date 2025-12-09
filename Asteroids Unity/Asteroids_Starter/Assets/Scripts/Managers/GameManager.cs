@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI scoreTextObject = null; 
 
-    private int score = 0;
+    public int score = 0;
 
     [SerializeField]
     private GameObject player = null;
@@ -27,20 +27,21 @@ public class GameManager : MonoBehaviour
         if (instance != null)
             Destroy(instance.gameObject);
         instance = this;
+        score = 1;
     }
     public void NotifyPlayerDeath()
     {
         // save final score then go to game over screen
         finalScore = score;
+        AsteroidManager.asteroidScore = AsteroidManager.Instance.asteroidCount;
         SceneManager.LoadScene("GameOver");
     }
 
-    public void AddScore(int amount)
+    public void AddScore()
     {
         // increase score and update UI
-        score += amount;
 
         if (scoreTextObject != null)
-            scoreTextObject.text = "Score: " + score.ToString();
+            scoreTextObject.text = "Asteroids: " + AsteroidManager.Instance.asteroidCount.ToString() +  "\n Wave:" + score.ToString();
     }
 }

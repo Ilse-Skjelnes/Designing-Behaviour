@@ -35,7 +35,7 @@ public class PlayerGun : MonoBehaviour
         shootingCooldownTimer -= Time.deltaTime;
 
         // shoot if pressing button and shooting not on cooldown
-        if (Input.GetKey(KeyCode.Space) && shootingCooldownTimer <= 0)
+        if (Input.GetKeyDown(KeyCode.Space) && shootingCooldownTimer <= 0)
         {
             Shoot();
         }

@@ -13,7 +13,7 @@ public class GameOverMenu : MonoBehaviour
     private void Start()
     {
         // display final score from previous game
-        scoreText.text = "Score: " + GameManager.finalScore.ToString();
+        scoreText.text = "Largest asteroid snake: " + AsteroidManager.asteroidScore.ToString();
     }
 
     private void Update()

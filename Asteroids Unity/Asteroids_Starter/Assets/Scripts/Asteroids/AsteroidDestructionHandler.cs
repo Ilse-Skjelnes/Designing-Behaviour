@@ -23,7 +23,7 @@ public class AsteroidDestructionHandler : MonoBehaviour
 
     private void HandleDeath()
     {
-        GameManager.Instance.AddScore(pointsScored);
+        GameManager.Instance.AddScore();
 
         AsteroidManager.Instance.NotifyAsteroidDestroyed(data);
         
@@ -32,8 +32,7 @@ public class AsteroidDestructionHandler : MonoBehaviour
         {
             for (int i = 0; i < numberOfAsteroidsToSpawn; i++)
             {
-                GameObject asteroid = GameObject.Instantiate<GameObject>(asteroidToSpawn, transform.position, transform.rotation);
-                AsteroidManager.Instance.NotifyAsteroidInstantiated(data);   
+                GameObject asteroid = GameObject.Instantiate<GameObject>(asteroidToSpawn, transform.position, transform.rotation); 
                 LaunchInRandomDirection(asteroid);
             }
         }
