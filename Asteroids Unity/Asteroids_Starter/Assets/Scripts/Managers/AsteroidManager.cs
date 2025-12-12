@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -24,7 +25,7 @@ public class AsteroidManager : MonoBehaviour
     public float maxForceMagnitudeTowardsCenter = 1f;
 
     public List<GameObject> asteroidString = new List<GameObject>();
-    public int stringCount = 2;
+    public int stringCount = 1;
 
     [SerializeField]
     private int maxRotation = 10;
@@ -45,6 +46,14 @@ public class AsteroidManager : MonoBehaviour
 
     static public int asteroidScore;
     public int asteroidCount;
+    private int asteroids;
+
+    private float spawnTimer;
+    [SerializeField]
+    private float spawnTime = 1f;
+    public Vector3 spawnPosition;
+
+    public int asteroidsInScreen;
     
     private void Awake()
     {
@@ -60,10 +69,12 @@ public class AsteroidManager : MonoBehaviour
 
     private void Start()
     {
-        ResetTimer();
-        SpawnAsteroidOffscreen();
+        Vector3 spawnPosition = GetRandomPositionOffScreen();
+        AsteroidsSpawnen(spawnPosition);
 
         waitingTimer = waitingTime;
+
+        spawnTimer = 0f;
     }
 
     private void Update()
@@ -73,33 +84,23 @@ public class AsteroidManager : MonoBehaviour
 
         if (asteroidString.Count <= 0)
         {
-            SpawnAsteroidOffscreen();        
-            Grow(stringCount);
-            stringCount++;           
+            stringCount++;
+            asteroids = stringCount;
+            spawnPosition = GetRandomPositionOffScreen();
+            for (int i = stringCount; i > 0; i--)
+            {
+                AsteroidsSpawnen(spawnPosition);
+            }                      
         }
-
-        if (asteroidSpawnTimer <= 0)
+        else if (asteroidsInScreen < asteroidCount)
         {
-            RandomMovement(asteroidString[0].GetComponent<Rigidbody>());
-            ResetTimer();
+            if(spawnPosition.x - 1 > -11)
+                AsteroidsSpawnen(spawnPosition - Vector3.right);
+            else
+            {
+                AsteroidsSpawnen(spawnPosition + Vector3.right * 9);
+            }
         }
-
-            
-    }
-
-    private void SpawnAsteroidOffscreen()
-    {
-        // instantiate new GO from prefab on position off screen
-        GameObject asteroid = Instantiate(asteroidPrefab, GetRandomPositionOffScreen(), Quaternion.identity, transform);
-        asteroidString.Add(asteroid);
-
-        GameManager.Instance.score ++;
-    }
-
-  
-private void ResetTimer()
-    {
-        asteroidSpawnTimer = Random.Range(minSpawnTime, maxSpawnTime);
     }
 
     private Vector3 GetRandomPositionOffScreen()
@@ -114,23 +115,23 @@ private void ResetTimer()
         // define position vector in screen space
         Vector3 screenPosition = Vector3.zero;
 
-        switch (side)
+        switch (0)
         {
             case 0: // top
                 screenPosition = new Vector3(Random.Range(-paddingWidth, Screen.width + paddingWidth), Screen.height + paddingHeight);
                 break;
 
-            case 1: // right
-                screenPosition = new Vector3(Screen.width + paddingWidth, Random.Range(-paddingHeight, Screen.height + paddingHeight));
-                break;
+            //case 1: // right
+            //    screenPosition = new Vector3(Screen.width + paddingWidth, Random.Range(-paddingHeight, Screen.height + paddingHeight));
+            //    break;
 
-            case 2: // bottom
-                screenPosition = new Vector3(Random.Range(-paddingWidth, Screen.width + paddingWidth), -paddingHeight);
-                break;
+            //case 2: // bottom
+            //    screenPosition = new Vector3(Random.Range(-paddingWidth, Screen.width + paddingWidth), -paddingHeight);
+            //    break;
 
-            case 3: // left
-                screenPosition = new Vector3(-paddingWidth, Random.Range(-paddingHeight, Screen.height + paddingHeight));
-                break;
+            //case 3: // left
+            //    screenPosition = new Vector3(-paddingWidth, Random.Range(-paddingHeight, Screen.height + paddingHeight));
+            //    break;
         }
 
         // convert from view port space to world space
@@ -142,62 +143,18 @@ private void ResetTimer()
     public void NotifyAsteroidDestroyed(AsteroidData asteroid)
     {
         asteroidString.Remove(asteroid.gameObject);
+        asteroidsInScreen--;
+        asteroids--;
     }
 
-    private void SpawnAtFirstAsteroid(Vector3 firstAsteroidTransform)
-    {   
-        // instantiate new GO from prefab on position off screen
-        GameObject asteroid = Instantiate(asteroidPrefab, firstAsteroidTransform, Quaternion.identity, transform);
 
+    public void AsteroidsSpawnen(Vector3 spawnPosition)
+    {
+        asteroidsInScreen++;
+
+        GameObject asteroid = Instantiate(asteroidPrefab, spawnPosition, Quaternion.identity);
         asteroidString.Add(asteroid);
-    }
 
-    private void RandomMovement(Rigidbody rb)
-    {
-        Rigidbody rigidbody = rb.GetComponent<Rigidbody>();
 
-        if (rigidbody == null)
-            return;
-
-        Vector3 direction = new Vector3(Random.Range(-maxRotation, maxRotation), 0, Random.Range(-maxRotation, maxRotation));
-
-        rigidbody.AddForce(direction * asteroidSpeed * Time.deltaTime, ForceMode.Impulse);
-    }
-
-    private void Grow(int asteroidAmount)
-    {
-        for (int i = 0; i < asteroidAmount; i++)
-        {
-            if (i == 0)
-                continue;
-
-            Vector3 spawnPosition = asteroidString[i - 1].transform.position;
-            
-            Vector3 addVector = Vector3.RotateTowards(addedVector, spawnPosition, 2 * Mathf.PI, 0.0f);
-            
-            Vector3 pos = spawnPosition + addVector;
-            SpawnAtFirstAsteroid(pos);
-        }
-    }
-
-    public void MakeAsteroidsMove(GameObject asteroid)
-    {
-        int listPlace = asteroidString.IndexOf(asteroid);
-
-        if (listPlace > 0)
-        {
-            Vector3 currentPosition = asteroidString[listPlace].transform.position;
-            Vector3 targetPosition = asteroidString[listPlace - 1].transform.position;
-            Debug.Log(listPlace + "is following: " + (listPlace - 1));
-            
-            waitingTimer -= Time.deltaTime;
-            if (waitingTimer <= 0)
-            {
-                asteroid.transform.position = Vector3.SmoothDamp(currentPosition, targetPosition, ref refVelocity, smoothTime);
-                waitingTimer = waitingTime * listPlace;
-                Debug.Log("WaitingTime is: " + waitingTimer);
-            }
-
-        }
     }
 }
