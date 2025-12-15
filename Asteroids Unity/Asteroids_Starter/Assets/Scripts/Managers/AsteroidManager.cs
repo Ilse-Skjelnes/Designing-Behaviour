@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -16,7 +17,6 @@ public class AsteroidManager : MonoBehaviour
     public float padding = 0.1f;
     public float minSpawnTime = 1;
     public float maxSpawnTime = 3;
-    private float asteroidSpawnTimer;
 
     [SerializeField]
     public float minForceMagnitudeTowardsCenter = 0.5f;
@@ -24,33 +24,22 @@ public class AsteroidManager : MonoBehaviour
     [SerializeField]
     public float maxForceMagnitudeTowardsCenter = 1f;
 
-    public List<GameObject> asteroidString = new List<GameObject>();
-    public int stringCount = 1;
+    public List<GameObject> asteroids = new List<GameObject>();
+    public List<Transform> spawnPostions = new List<Transform>();
+    public int snakeCount = 1;
 
-    [SerializeField]
-    private int maxRotation = 10;
-    [SerializeField]
-    private int asteroidSpeed = 1;
-
-    [SerializeField]
-    private int spawnOffset = 1;
-    private Vector3 addedVector;
-    [SerializeField]
-    private float smoothTime = 1.0f;
-    [SerializeField]
-    private Vector3 refVelocity = new Vector3(0, 0, 1);
-
-    [SerializeField]
-    private float waitingTime;
-    private float waitingTimer;
+    //[SerializeField]
+    //private int maxRotation = 10;
+    //[SerializeField]
+    //private int asteroidSpeed = 1;
 
     static public int asteroidScore;
     public int asteroidCount;
-    private int asteroids;
+    private int asteroid;
 
     private float spawnTimer;
     [SerializeField]
-    private float spawnTime = 1f;
+    private float spawnTime = 3;
     public Vector3 spawnPosition;
 
     public int asteroidsInScreen;
@@ -62,43 +51,47 @@ public class AsteroidManager : MonoBehaviour
             Destroy(instance.gameObject);
         instance = this;
 
-        addedVector = new Vector3(spawnOffset, 0, 0);
-
-        asteroidCount = 0;
+        asteroidCount = 1;
     }
 
     private void Start()
     {
-        Vector3 spawnPosition = GetRandomPositionOffScreen();
+        spawnPosition = GetRandomPositionOffScreen();
         AsteroidsSpawnen(spawnPosition);
-
-        waitingTimer = waitingTime;
 
         spawnTimer = 0f;
     }
 
     private void Update()
     {
-        asteroidSpawnTimer -= Time.deltaTime;
-        asteroidCount = asteroidString.Count;
+        spawnTimer -= Time.deltaTime;
+        
 
-        if (asteroidString.Count <= 0)
+        //Spawn the head of the asteroid snake
+        if (asteroidCount <= 0)
         {
-            stringCount++;
-            asteroids = stringCount;
+            snakeCount++;
+            asteroidCount = snakeCount;
+            asteroid = 1;
+
             spawnPosition = GetRandomPositionOffScreen();
-            for (int i = stringCount; i > 0; i--)
-            {
-                AsteroidsSpawnen(spawnPosition);
-            }                      
+            AsteroidsSpawnen(spawnPosition);
         }
-        else if (asteroidsInScreen < asteroidCount)
+
+        //Spawn the body of the Snake
+        if (asteroid < snakeCount)
         {
-            if(spawnPosition.x - 1 > -11)
+            AsteroidsSpawnen(spawnPosition);
+            asteroid++;
+        }
+        
+        if (asteroidsInScreen < asteroidCount)
+        {
+            if (spawnPosition.x - 1 > -11)
                 AsteroidsSpawnen(spawnPosition - Vector3.right);
             else
             {
-                AsteroidsSpawnen(spawnPosition + Vector3.right * 9);
+                AsteroidsSpawnen(spawnPosition + Vector3.right);
             }
         }
     }
@@ -142,19 +135,23 @@ public class AsteroidManager : MonoBehaviour
 
     public void NotifyAsteroidDestroyed(AsteroidData asteroid)
     {
-        asteroidString.Remove(asteroid.gameObject);
+        asteroids.Remove(asteroid.gameObject);
         asteroidsInScreen--;
-        asteroids--;
+        
     }
 
 
     public void AsteroidsSpawnen(Vector3 spawnPosition)
     {
-        asteroidsInScreen++;
 
-        GameObject asteroid = Instantiate(asteroidPrefab, spawnPosition, Quaternion.identity);
-        asteroidString.Add(asteroid);
+        if (spawnTimer <= 0)
+        {
+            asteroidsInScreen++;
 
+            GameObject asteroid = Instantiate(asteroidPrefab, spawnPosition, Quaternion.identity);
+            asteroids.Add(asteroid);
 
+            spawnTimer = spawnTime;
+        }
     }
 }

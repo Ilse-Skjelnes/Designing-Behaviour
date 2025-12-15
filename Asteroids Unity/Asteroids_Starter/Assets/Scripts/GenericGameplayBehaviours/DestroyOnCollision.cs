@@ -13,6 +13,12 @@ public class DestroyOnCollision : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         DestroySelf();
+
+        if (other.tag == "Asteroid")
+        {
+            AsteroidManager.Instance.asteroidCount--;
+            Debug.Log("Asteroid Destroyed");
+        }
     }
 
     private void DestroySelf()
@@ -22,5 +28,7 @@ public class DestroyOnCollision : MonoBehaviour
             GameObject.Instantiate<GameObject>(objectToSpawnOnCollision, transform.position, transform.rotation);
 
         Destroy(gameObject);
+
+        
     }
 }

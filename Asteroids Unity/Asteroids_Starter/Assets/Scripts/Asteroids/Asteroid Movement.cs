@@ -7,7 +7,7 @@ public class AsteroidMovement : MonoBehaviour
 
     private SphereCollider sphereCollider;
 
-    private float wrappingMargin = 10f;
+    private float wrappingMargin = 1f;
 
     private float maxMoveX = 1f;
     private float maxMoveZ = 1f;
@@ -25,6 +25,9 @@ public class AsteroidMovement : MonoBehaviour
         spawnPosition = AsteroidManager.Instance.spawnPosition;
 
         sphereCollider = GetComponent<SphereCollider>();
+
+        addedMoverX = addedMoverZ = 0;
+        addedMoveX = addedMoveZ = 1f;
     }
 
     // Update is called once per frame
@@ -41,40 +44,33 @@ public class AsteroidMovement : MonoBehaviour
 
         // set up new position variables to use in wrapping logic
         Vector3 newScreenPos = screenPos;
-        Vector3 newPositionOffset = new Vector3();
 
-
+        Debug.Log("Screenwidth: " + Screen.width);
         // for each off-screen position, place on other side of screen and add object's radius to spawn off-screen
         // checking with a wrappingMargin to prevent flickering between two sides
-        //if (rightEdgeScreenPos.x > Screen.width + wrappingMargin)
-        //{
-        //    // wrap to left
-        //    AsteroidsOutScreen();
-        //}
+        if (rightEdgeScreenPos.x > Screen.width)
+        {
+            
+            // wrap to left
+            AsteroidsOutScreen();
+        }
         //else if (leftEdgeScreenPos.x < 0 - wrappingMargin)
         //{
         //    // wrap to right
         //    AsteroidsOutScreen();
         //}
 
-        if (topEdgeScreenPos.y > Screen.height + wrappingMargin)
-        {
-            // wrap to bottom
-            AsteroidsOutScreen();
-        }
-        //if (bottomEdgeScreenPos.y < 0 - wrappingMargin)
+        //if (topEdgeScreenPos.y > Screen.height + wrappingMargin)
         //{
-        //    // wrap to top
+        //    // wrap to bottom
         //    AsteroidsOutScreen();
         //}
-
-        // calculate final position and set object to new position
-        Vector3 newPosition = Camera.main.ScreenToWorldPoint(newScreenPos) + newPositionOffset;
-        float newPosX = newPosition.x;
-        float newPosZ = newPosition.z;
-
-
-
+        if (bottomEdgeScreenPos.y < 0)
+        {
+            // wrap to top
+            Debug.Log("Asteroid left screen though bottom");
+            AsteroidsOutScreen();
+        }
 
         RandomMovement(spawnPosition.x, spawnPosition.z);
     }
@@ -95,7 +91,7 @@ public class AsteroidMovement : MonoBehaviour
     private void AsteroidsOutScreen()
     {
         AsteroidManager.Instance.asteroidsInScreen--;
-        AsteroidManager.Instance.asteroidString.Remove(gameObject);
+        AsteroidManager.Instance.asteroids.Remove(gameObject);
         Destroy(gameObject);
     }
 }
