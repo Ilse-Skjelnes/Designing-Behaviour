@@ -71,15 +71,15 @@ public class AsteroidMovement : MonoBehaviour
         RandomMovement(spawnPosition.x, spawnPosition.z);
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        AsteroidsOutScreen();
-    }
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    AsteroidsOutScreen();
+    //}
 
-    private void OnTriggerEnter(Collider other)
-    {
-        AsteroidsOutScreen();
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    AsteroidsOutScreen();
+    //}
 
     private void OnCollisionEnter(Collision collision)
     {

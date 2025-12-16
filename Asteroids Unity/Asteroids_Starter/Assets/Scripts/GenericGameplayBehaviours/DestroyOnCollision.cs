@@ -10,8 +10,6 @@ public class DestroyOnCollision : MonoBehaviour
     [SerializeField]
     private GameObject objectToSpawnOnCollision = null;
 
-    public AudioSource source;
-    public List<AudioClip> clips = new List<AudioClip>();
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -24,7 +22,7 @@ public class DestroyOnCollision : MonoBehaviour
 
         if (other.tag == "Asteroid")
         {
-            PlaySound();
+            
             AsteroidManager.Instance.asteroidCount--;
             Debug.Log("Asteroid Destroyed");
         }
@@ -39,10 +37,4 @@ public class DestroyOnCollision : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void PlaySound()
-    {
-        int i = Random.Range(0, clips.Count + 1);
-        source.clip = clips[i];
-        source.Play();
-    }
 }

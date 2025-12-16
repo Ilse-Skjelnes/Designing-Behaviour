@@ -192,8 +192,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c12580fa2d7355642b47b96a4399edd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AsteroidMovement
-  maxMoveX: 3
-  maxMoveZ: -2
+  maxMoveX: 1.5
+  maxMoveZ: -1
   addedMoveX: 1
   addedMoveZ: 1
 --- !u!82 &1014114144736200538
