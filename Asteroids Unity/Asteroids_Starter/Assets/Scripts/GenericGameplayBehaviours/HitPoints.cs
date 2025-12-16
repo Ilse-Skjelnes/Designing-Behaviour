@@ -32,7 +32,7 @@ public class HitPoints : MonoBehaviour
     private void Start()
     {
         // initialize hitpoints
-        currentHitpoints = maxHitPoints;
+        currentHitpoints = 0;
 
         // cache collider
         objectCollider = GetComponent<Collider>();
@@ -62,6 +62,8 @@ public class HitPoints : MonoBehaviour
 
     private void TakeDamage()
     {
+
+        Debug.Log("Health: "+ currentHitpoints);
         // don't take any damage if invulnerable
         if (invulnerabilityTimer > 0.0f)
             return;

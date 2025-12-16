@@ -26,12 +26,7 @@ public class AsteroidManager : MonoBehaviour
 
     public List<GameObject> asteroids = new List<GameObject>();
     public List<Transform> spawnPostions = new List<Transform>();
-    public int snakeCount = 1;
-
-    //[SerializeField]
-    //private int maxRotation = 10;
-    //[SerializeField]
-    //private int asteroidSpeed = 1;
+    public int snakeCount = 0;
 
     static public int asteroidScore;
     public int asteroidCount;
@@ -43,6 +38,7 @@ public class AsteroidManager : MonoBehaviour
     public Vector3 spawnPosition;
 
     public int asteroidsInScreen;
+    public bool startGame = false;
     
     private void Awake()
     {
@@ -51,26 +47,28 @@ public class AsteroidManager : MonoBehaviour
             Destroy(instance.gameObject);
         instance = this;
 
-        asteroidCount = 1;
+        asteroidCount = 0;
+
+        spawnPosition = GetRandomPositionOffScreen();
     }
 
     private void Start()
     {
-        spawnPosition = GetRandomPositionOffScreen();
-        AsteroidsSpawnen(spawnPosition);
-
         spawnTimer = 0f;
     }
 
     private void Update()
     {
         spawnTimer -= Time.deltaTime;
-        
+
+        GameManager.Instance.PlayCutScene(snakeCount);
 
         //Spawn the head of the asteroid snake
         if (asteroidCount <= 0)
         {
             snakeCount++;
+            GameManager.Instance.cutSceneTimer = GameManager.Instance.cutSceneTime;
+
             asteroidCount = snakeCount;
             asteroid = 1;
 
@@ -99,7 +97,7 @@ public class AsteroidManager : MonoBehaviour
     private Vector3 GetRandomPositionOffScreen()
     {
         // randomly choose which side to spawn
-        int side = Random.Range(0, 4);
+        int side = Random.Range(0, 2);
 
         // define padding as percentual screen w/h
         float paddingWidth = Screen.width * padding;
@@ -137,9 +135,7 @@ public class AsteroidManager : MonoBehaviour
     {
         asteroids.Remove(asteroid.gameObject);
         asteroidsInScreen--;
-        
     }
-
 
     public void AsteroidsSpawnen(Vector3 spawnPosition)
     {

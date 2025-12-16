@@ -1,3 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AsteroidDestructionHandler : MonoBehaviour
@@ -20,10 +25,12 @@ public class AsteroidDestructionHandler : MonoBehaviour
     [SerializeField]
     public float maxForceMagnitudeSpawnedAsteroid = 1f;
 
+    public List<AudioClip> clips = new List<AudioClip>();
+    public AudioSource source;
 
     private void HandleDeath()
     {
-
+        PlaySound();
         AsteroidManager.Instance.NotifyAsteroidDestroyed(data);
         
         // spawn asteroids on death
@@ -50,4 +57,11 @@ public class AsteroidDestructionHandler : MonoBehaviour
         // apply force in given direction with given magnitude 
         asteroid.GetComponent<Rigidbody>().AddForce(direction * forceMagnitude, ForceMode.VelocityChange);
     }
+    private void PlaySound()
+    {
+        int i = Random.Range(0, clips.Count + 1);
+        source.clip = clips[i];
+        source.Play();
+    }
+
 }

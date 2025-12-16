@@ -123,6 +123,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectToSpawnOnCollision: {fileID: 6371256490857905853, guid: 6f388f3fee1c133459bead65c328810f, type: 3}
+  source: {fileID: 0}
+  clips:
+  - {fileID: 8300000, guid: 98f3a331798a2f8429929603ccdcb770, type: 3}
+  - {fileID: 8300000, guid: c5e57484ed9e60a46a692db7860e3d8b, type: 3}
+  - {fileID: 8300000, guid: 034a7a928162d2d48b22625c06cdd9be, type: 3}
 --- !u!1 &6888747993672653468
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,10 +8,6 @@ public class GameOverMenu : MonoBehaviour
     private string levelName;
 
     [SerializeField]
-    private TextMeshProUGUI scoreText = null;
-    private int scoreNumber;
-
-    [SerializeField]
     private TextMeshProUGUI snakeText = null;
     private int snakeCount;
 
@@ -19,11 +15,9 @@ public class GameOverMenu : MonoBehaviour
 
     private void Start()
     {
-        //ssnakeCount = AsteroidManager.Instance.stringCount;
-        scoreNumber = AsteroidManager.asteroidScore;
+        snakeCount = AsteroidManager.Instance.snakeCount;
         // display final score from previous game
-        //scoreText.text = "HighScore: " + scoreNumber.ToString();
-        //snakeText.text = "Largest Snake: " + snakeCount.ToString();
+        snakeText.text = snakeCount.ToString();
 
     }
 

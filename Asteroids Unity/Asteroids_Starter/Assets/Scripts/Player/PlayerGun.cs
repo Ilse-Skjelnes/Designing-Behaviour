@@ -1,4 +1,8 @@
-using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerGun : MonoBehaviour
@@ -25,6 +29,9 @@ public class PlayerGun : MonoBehaviour
     private float timer = 1f;
     public float timerMax = 1.0f;
 
+    public AudioSource source;
+    public List<AudioClip> clips = new List<AudioClip>();
+
     private void Awake()
     {
         timer = timerMax;
@@ -37,6 +44,7 @@ public class PlayerGun : MonoBehaviour
         // shoot if pressing button and shooting not on cooldown
         if (Input.GetKeyDown(KeyCode.Space) && shootingCooldownTimer <= 0)
         {
+            PlaySound();
             Shoot();
         }
     }
@@ -49,5 +57,12 @@ public class PlayerGun : MonoBehaviour
 
         // reset shooting cooldown
         shootingCooldownTimer = shootingCooldown;
+    }
+
+    private void PlaySound()
+    {
+        int i = Random.Range(0, clips.Count + 1);
+        source.clip = clips[i];
+        source.Play();
     }
 }

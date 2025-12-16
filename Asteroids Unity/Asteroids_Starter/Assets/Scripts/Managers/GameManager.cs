@@ -21,7 +21,14 @@ public class GameManager : MonoBehaviour
     private GameObject player = null;
     public GameObject Player { get { return player; } }
 
-    public int currentHealth = 5;
+    public int currentHealth = 0;
+
+    public GameObject cutSceneText;
+    public TextMeshProUGUI waveNumber;
+    public float cutSceneTimer;
+    public float cutSceneTime = 1f;
+
+    private bool timerOn = true;
 
     private void Awake()
     {
@@ -29,14 +36,16 @@ public class GameManager : MonoBehaviour
         if (instance != null)
             Destroy(instance.gameObject);
         instance = this;
+
+        cutSceneTimer = cutSceneTime;
         
     }
     public void NotifyPlayerDeath()
     {
         // save final score then go to game over screen
         finalScore = score;
-        AsteroidManager.asteroidScore = AsteroidManager.Instance.asteroidCount;
-        SceneManager.LoadScene("GameOver");
+        AsteroidManager.asteroidScore = AsteroidManager.Instance.snakeCount;
+        SceneManager.LoadScene(2);
     }
 
     private void Update()
@@ -45,5 +54,29 @@ public class GameManager : MonoBehaviour
 
         if (scoreTextObject != null)
             scoreTextObject.text = AsteroidManager.Instance.asteroidCount.ToString();
+
+        if (timerOn)
+        {
+            cutSceneTimer -= Time.deltaTime;
+        }
+
+        
+    }
+
+    public void PlayCutScene(int wave)
+    {
+        if (cutSceneTimer >= 0)
+        {
+            cutSceneText.SetActive(true);
+            waveNumber.text = wave.ToString();
+
+            Debug.Log("PlayCutScene");
+        }
+        else
+        {
+            Debug.Log("TImer is 0");
+            cutSceneText.SetActive(false);
+        }
+
     }
 }

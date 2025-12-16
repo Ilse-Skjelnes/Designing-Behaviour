@@ -9,8 +9,8 @@ public class AsteroidMovement : MonoBehaviour
 
     private float wrappingMargin = 1f;
 
-    private float maxMoveX = 1f;
-    private float maxMoveZ = 1f;
+    [SerializeField] private float maxMoveX = 1f;
+    [SerializeField] private float maxMoveZ = 1f;
 
     [SerializeField] private float addedMoveX = 1f;
     [SerializeField] private float addedMoveZ = 1f;
@@ -25,9 +25,6 @@ public class AsteroidMovement : MonoBehaviour
         spawnPosition = AsteroidManager.Instance.spawnPosition;
 
         sphereCollider = GetComponent<SphereCollider>();
-
-        addedMoverX = addedMoverZ = 0;
-        addedMoveX = addedMoveZ = 1f;
     }
 
     // Update is called once per frame
@@ -45,20 +42,19 @@ public class AsteroidMovement : MonoBehaviour
         // set up new position variables to use in wrapping logic
         Vector3 newScreenPos = screenPos;
 
-        Debug.Log("Screenwidth: " + Screen.width);
         // for each off-screen position, place on other side of screen and add object's radius to spawn off-screen
         // checking with a wrappingMargin to prevent flickering between two sides
-        if (rightEdgeScreenPos.x > Screen.width)
-        {
-            
-            // wrap to left
-            AsteroidsOutScreen();
-        }
-        //else if (leftEdgeScreenPos.x < 0 - wrappingMargin)
+        //if (rightEdgeScreenPos.x > Screen.width)
         //{
-        //    // wrap to right
+
+        //    // wrap to left
         //    AsteroidsOutScreen();
         //}
+        if (leftEdgeScreenPos.x < 0)
+        {
+            // wrap to right
+            AsteroidsOutScreen();
+        }
 
         //if (topEdgeScreenPos.y > Screen.height + wrappingMargin)
         //{
@@ -75,7 +71,20 @@ public class AsteroidMovement : MonoBehaviour
         RandomMovement(spawnPosition.x, spawnPosition.z);
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        AsteroidsOutScreen();
+    }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        AsteroidsOutScreen();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        AsteroidsOutScreen();
+    }
 
     private void RandomMovement(float spawnPointX, float spawnPointZ)
     {
@@ -90,6 +99,8 @@ public class AsteroidMovement : MonoBehaviour
 
     private void AsteroidsOutScreen()
     {
+        Debug.Log("Asteroids left the screen");
+
         AsteroidManager.Instance.asteroidsInScreen--;
         AsteroidManager.Instance.asteroids.Remove(gameObject);
         Destroy(gameObject);
