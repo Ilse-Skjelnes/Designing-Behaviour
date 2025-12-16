@@ -44,6 +44,6 @@ public class GameManager : MonoBehaviour
         // increase score and update UI
 
         if (scoreTextObject != null)
-            scoreTextObject.text = "Asteroids: " + AsteroidManager.Instance.asteroidCount.ToString() +  "\nWave:" + score.ToString();
+            scoreTextObject.text = AsteroidManager.Instance.asteroidCount.ToString();
     }
 }

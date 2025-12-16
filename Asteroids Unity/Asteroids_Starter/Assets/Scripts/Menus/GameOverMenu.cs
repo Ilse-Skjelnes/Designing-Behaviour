@@ -22,8 +22,8 @@ public class GameOverMenu : MonoBehaviour
         //ssnakeCount = AsteroidManager.Instance.stringCount;
         scoreNumber = AsteroidManager.asteroidScore;
         // display final score from previous game
-        scoreText.text = "HighScore: " + scoreNumber.ToString();
-        snakeText.text = "Largest Snake: " + snakeCount.ToString();
+        //scoreText.text = "HighScore: " + scoreNumber.ToString();
+        //snakeText.text = "Largest Snake: " + snakeCount.ToString();
 
     }
 

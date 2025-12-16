@@ -20,11 +20,12 @@ public class PlayerHealth : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (0 <= GameManager.Instance.currentHealth && GameManager.Instance.currentHealth < health)
+        if ((0 <= GameManager.Instance.currentHealth) && (GameManager.Instance.currentHealth < health))
         {
-            health = GameManager.Instance.currentHealth;
-            healthBar[health].texture = lostHealth;
-            Debug.Log(health);
+            int h = GameManager.Instance.currentHealth;
+            healthBar[h].texture = lostHealth;
+            Debug.Log(h);
+            health = h;
         }
     }
 }
