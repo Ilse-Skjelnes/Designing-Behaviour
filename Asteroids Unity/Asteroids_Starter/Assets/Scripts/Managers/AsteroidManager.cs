@@ -1,8 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class AsteroidManager : MonoBehaviour
@@ -12,6 +9,7 @@ public class AsteroidManager : MonoBehaviour
     public static AsteroidManager Instance { get { return instance; } }
 
     public GameObject asteroidPrefab;
+    public GameObject asteroidBodyPrefab;
     public float AstreroidfollowingForce;
 
     public float padding = 0.1f;
@@ -39,6 +37,8 @@ public class AsteroidManager : MonoBehaviour
 
     public int asteroidsInScreen;
     public bool startGame = false;
+
+    public float offsetIncrease;
     
     private void Awake()
     {
@@ -72,24 +72,25 @@ public class AsteroidManager : MonoBehaviour
             asteroidCount = snakeCount;
             asteroid = 1;
 
+
             spawnPosition = GetRandomPositionOffScreen();
-            AsteroidsSpawnen(spawnPosition);
+            AsteroidsSpawnen(spawnPosition, offsetIncrease * asteroid, asteroidPrefab);
         }
 
         //Spawn the body of the Snake
         if (asteroid < snakeCount)
         {
-            AsteroidsSpawnen(spawnPosition);
+            AsteroidsSpawnen(spawnPosition, offsetIncrease * asteroid, asteroidBodyPrefab);
             asteroid++;
         }
         
         if (asteroidsInScreen < asteroidCount)
         {
             if (spawnPosition.x - 1 > -11)
-                AsteroidsSpawnen(spawnPosition - Vector3.right);
+                AsteroidsSpawnen(spawnPosition - Vector3.right, offsetIncrease * asteroid, asteroidBodyPrefab);
             else
             {
-                AsteroidsSpawnen(spawnPosition + Vector3.right);
+                AsteroidsSpawnen(spawnPosition + Vector3.right, offsetIncrease * asteroid, asteroidBodyPrefab);
             }
         }
     }
@@ -109,7 +110,7 @@ public class AsteroidManager : MonoBehaviour
         switch (0)
         {
             case 0: // top
-                screenPosition = new Vector3(Random.Range(-paddingWidth, Screen.width + paddingWidth), Screen.height + paddingHeight);
+                screenPosition = new Vector3(Random.Range(Screen.width/3, Screen.width/3 * 2 ), Screen.height + paddingHeight);
                 break;
 
             //case 1: // right
@@ -137,16 +138,20 @@ public class AsteroidManager : MonoBehaviour
         asteroidsInScreen--;
     }
 
-    public void AsteroidsSpawnen(Vector3 spawnPosition)
+    public void AsteroidsSpawnen(Vector3 spawnPosition, float offset, GameObject asteroidPrefab)
     {
 
         if (spawnTimer <= 0)
         {
             asteroidsInScreen++;
 
-            GameObject asteroid = Instantiate(asteroidPrefab, spawnPosition, Quaternion.identity);
+            GameObject asteroid = Instantiate(asteroidPrefab, spawnPosition, Quaternion.LookRotation(Vector3.zero - spawnPosition));
             asteroids.Add(asteroid);
-
+            AsteroidMovement asteroidMovement = asteroid.GetComponent<AsteroidMovement>();
+            if (asteroidMovement != null)
+            {
+                asteroidMovement.Offset = offset;
+            }
             spawnTimer = spawnTime;
         }
     }

@@ -7,6 +7,7 @@ public class WrapObjectInScreen : MonoBehaviour
 
     private float wrappingMargin = 1f;
 
+
     private void Start()
     {
         sphereCollider = GetComponent<SphereCollider>();

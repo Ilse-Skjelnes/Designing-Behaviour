@@ -60,7 +60,8 @@ public class GameManager : MonoBehaviour
             cutSceneTimer -= Time.deltaTime;
         }
 
-        
+        if (player == null)
+            NotifyPlayerDeath();
     }
 
     public void PlayCutScene(int wave)

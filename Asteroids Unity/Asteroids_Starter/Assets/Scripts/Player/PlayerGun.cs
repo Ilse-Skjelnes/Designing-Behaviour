@@ -1,8 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerGun : MonoBehaviour
@@ -61,7 +58,8 @@ public class PlayerGun : MonoBehaviour
 
     private void PlaySound()
     {
-        int i = Random.Range(0, clips.Count + 1);
+        int i = Random.Range(0, clips.Count);
+        //if (i >= 0 && i < clips.Count) 
         source.clip = clips[i];
         source.Play();
     }
